@@ -3,58 +3,348 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Feliz Aniversário, Alisson!</title>
+    <title>Simulador de Maquineta de Cartão</title>
     <style>
         body {
-            background-color: #ffeb3b;
-            font-family: 'Comic Sans MS', cursive, sans-serif;
-            color: #d32f2f;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #2c3e50, #34495e); /* Gradiente escuro */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .maquineta {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 400px; /* Máximo de largura para celulares maiores */
+            height: 100%;
+            max-height: 700px; /* Altura máxima para evitar ultrapassar a tela */
+            overflow: hidden; /* Oculta a rolagem da maquineta */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .screen {
+            background-color: black;
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow-y: auto; /* Adiciona rolagem se necessário */
+        }
+
+        .screen p {
+            font-size: 1.2em;
+            margin: 10px 0;
+        }
+
+        .input-screen {
+            font-size: 2.5em;
             text-align: center;
-            padding: 50px;
+            letter-spacing: 2px;
+            margin: 15px 0;
         }
-        #bolo {
-            font-size: 50px;
+
+        .password {
+            font-size: 2.5em;
+            letter-spacing: 5px;
+        }
+
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 10px;
+            margin-top: 15px;
+            width: 100%;
+            max-width: 400px; /* Máximo de largura para o teclado */
+        }
+
+        .keypad button {
+            padding: 20px;
+            font-size: 1.5em;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .keypad button:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+
+        .keypad button:active {
+            transform: scale(0.95);
+        }
+
+        .parcelamento-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-height: 300px; /* Limita a altura máxima da seção de parcelamento */
+            overflow-y: auto; /* Adiciona rolagem se necessário */
+        }
+
+        .parcelamento {
+            font-size: 1.2em;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .parcelamento button {
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.3); /* Transparência */
+            color: white;
+            border: none; /* Remove borda */
+            border-radius: 10px; /* Pontas levemente arredondadas */
+            font-size: 1.2em;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-sizing: border-box; /* Garante que o padding não afete o tamanho do botão */
+        }
+
+        .parcelamento button:hover {
+            background-color: rgba(255, 255, 255, 0.5);
+            transform: scale(1.05);
+        }
+
+        .parcelamento button:active {
+            transform: scale(0.95);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .resumo-transacao {
+            text-align: left;
+            font-size: 1em;
             margin-top: 20px;
-            margin-bottom: 20px;
-            position: relative;
-            animation: bounce 1s infinite;
         }
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0);
-            }
-            40% {
-                transform: translateY(-30px);
-            }
-            60% {
-                transform: translateY(-15px);
-            }
+
+        .resumo-transacao p {
+            margin: 5px 0;
         }
-        #bolo:before {
-            content: "🎂";
-            font-size: 80px;
-            display: block;
+
+        button.payment-method {
+            padding: 15px;
+            font-size: 1.2em;
+            background-color: #4CAF50;
+            border-radius: 10px;
+            margin: 5px 0;
+            transition: background-color 0.3s ease, transform 0.2s ease;
         }
-        #mensagem {
-            font-size: 30px;
-            color: #00796b;
-            animation: shake 1s infinite;
+
+        button.payment-method:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
         }
-        @keyframes shake {
-            0%, 100% {
-                transform: translateX(0);
-            }
-            10%, 30%, 50%, 70%, 90% {
-                transform: translateX(-10px);
-            }
-            20%, 40%, 60%, 80% {
-                transform: translateX(10px);
-            }
+
+        button.payment-method:active {
+            transform: scale(0.95);
         }
+
+        button.nova-venda {
+            background-color: #3498db;
+            padding: 15px;
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+
+        button.nova-venda:hover {
+            background-color: #2980b9;
+        }
+
     </style>
 </head>
 <body>
-    <div id="bolo">Parabéns, Eliete !</div>
-    <div id="mensagem">Feliz Aniversário!</div>
+
+<div class="maquineta">
+    <div class="screen" id="telaInicial">
+        <p>Digite o valor:</p>
+        <div class="input-screen" id="valorDigitado">R$ 0,00</div>
+        <div class="keypad">
+            <button onclick="addNumber('1')">1</button>
+            <button onclick="addNumber('2')">2</button>
+            <button onclick="addNumber('3')">3</button>
+            <button onclick="addNumber('4')">4</button>
+            <button onclick="addNumber('5')">5</button>
+            <button onclick="addNumber('6')">6</button>
+            <button onclick="addNumber('7')">7</button>
+            <button onclick="addNumber('8')">8</button>
+            <button onclick="addNumber('9')">9</button>
+            <button onclick="addNumber('0')">0</button>
+            <button onclick="corrigir()">←</button>
+            <button onclick="entrar()">✔</button>
+        </div>
+    </div>
+
+    <div class="screen hidden" id="telaPagamento">
+        <p>Selecione o método de pagamento:</p>
+        <button class="payment-method" onclick="selecionarMetodo('Crédito')">Crédito</button>
+        <button class="payment-method" onclick="selecionarMetodo('Débito')">Débito</button>
+        <button class="payment-method" onclick="selecionarMetodo('Pix')">Pix</button>
+    </div>
+
+    <div class="screen hidden" id="telaParcelas">
+        <p>Selecione o número de parcelas:</p>
+        <div class="parcelamento-container" id="opcoesParcelamento"></div>
+    </div>
+
+    <div class="screen hidden" id="telaCartao">
+        <p>Insira o cartão...</p>
+        <div id="inserirCartaoAnimacao">⟶[======]</div>
+    </div>
+
+    <div class="screen hidden" id="telaSenha">
+        <p>Digite a senha:</p>
+        <div class="password" id="senhaDigitada">****</div>
+        <div class="keypad">
+            <button onclick="addSenha('1')">1</button>
+            <button onclick="addSenha('2')">2</button>
+            <button onclick="addSenha('3')">3</button>
+            <button onclick="addSenha('4')">4</button>
+            <button onclick="addSenha('5')">5</button>
+            <button onclick="addSenha('6')">6</button>
+            <button onclick="addSenha('7')">7</button>
+            <button onclick="addSenha('8')">8</button>
+            <button onclick="addSenha('9')">9</button>
+            <button onclick="addSenha('0')">0</button>
+            <button onclick="corrigirSenha()">←</button>
+            <button onclick="finalizarPagamento()">✔</button>
+        </div>
+    </div>
+
+    <div class="screen hidden" id="telaFinal">
+        <p>Resumo da transação:</p>
+        <div class="resumo-transacao" id="resumoTransacao"></div>
+        <button class="payment-method nova-venda" onclick="novaVenda()">Iniciar nova venda</button>
+    </div>
+</div>
+
+<script>
+    let valor = '';
+    let senha = '';
+    let metodo = '';
+    let parcelas = 1;
+
+    function atualizarValor() {
+        const valorFormatado = valor.length > 0 ? parseFloat(valor).toFixed(2) : '0,00';
+        document.getElementById('valorDigitado').innerText = 'R$ ' + valorFormatado;
+    }
+
+    function addNumber(number) {
+        if (valor.length < 8) { // Limite de até R$ 99999.99
+            valor += number;
+            atualizarValor();
+        }
+    }
+
+    function corrigir() {
+        valor = valor.slice(0, -1);
+        atualizarValor();
+    }
+
+    function entrar() {
+        if (document.getElementById('telaInicial').style.display !== 'none') {
+            if (valor.length === 0 || parseFloat(valor) === 0) {
+                alert('Digite um valor válido.');
+            } else {
+                mostrarTela('telaPagamento');
+            }
+        } else if (document.getElementById('telaSenha').style.display !== 'none') {
+            finalizarPagamento();
+        }
+    }
+
+    function selecionarMetodo(metodoSelecionado) {
+        metodo = metodoSelecionado;
+        if (metodo === 'Crédito') {
+            mostrarParcelamento();
+        } else {
+            mostrarTela('telaCartao');
+            simularInsercaoCartao();
+        }
+    }
+
+    function mostrarParcelamento() {
+        const valorTotal = parseFloat(valor);
+        let opcoes = '';
+        for (let i = 1; i <= 12; i++) {
+            const valorParcela = (valorTotal / i).toFixed(2);
+            opcoes += `<button class="parcelamento" onclick="selecionarParcelas(${i})">${i}x de R$ ${valorParcela}</button>`;
+        }
+        document.getElementById('opcoesParcelamento').innerHTML = opcoes;
+        mostrarTela('telaParcelas');
+    }
+
+    function selecionarParcelas(numeroParcelas) {
+        parcelas = numeroParcelas;
+        mostrarTela('telaCartao');
+        simularInsercaoCartao();
+    }
+
+    function mostrarTela(tela) {
+        document.querySelectorAll('.screen').forEach(t => t.classList.add('hidden'));
+        document.getElementById(tela).classList.remove('hidden');
+    }
+
+    function simularInsercaoCartao() {
+        setTimeout(() => {
+            mostrarTela('telaSenha');
+        }, 2000);
+    }
+
+    function addSenha(number) {
+        if (senha.length < 4) {
+            senha += number;
+            document.getElementById('senhaDigitada').innerText = senha.replace(/./g, '*');
+        }
+    }
+
+    function corrigirSenha() {
+        senha = senha.slice(0, -1);
+        document.getElementById('senhaDigitada').innerText = senha.replace(/./g, '*');
+    }
+
+    function finalizarPagamento() {
+        const valorTotal = parseFloat(valor).toFixed(2);
+        const valorParcela = (valorTotal / parcelas).toFixed(2);
+        const resumo = `
+            <p>Valor Total: R$ ${valorTotal}</p>
+            <p>Parcelas: ${parcelas}x de R$ ${valorParcela}</p>
+            <p>Método: ${metodo}</p>
+        `;
+        document.getElementById('resumoTransacao').innerHTML = resumo;
+        mostrarTela('telaFinal');
+    }
+
+    function novaVenda() {
+        valor = '';
+        senha = '';
+        metodo = '';
+        parcelas = 1;
+        atualizarValor();
+        document.getElementById('senhaDigitada').innerText = '****';
+        mostrarTela('telaInicial');
+    }
+</script>
+
 </body>
 </html>
